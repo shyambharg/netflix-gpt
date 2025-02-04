@@ -53,7 +53,7 @@ useEffect(()=>{
 
 
   return (
-    <div className="absolute bg-gradient-to-b from-black flex flex-wrap  justify-between w-full  z-10">
+    <div className="absolute bg-gradient-to-b from-black flex flex-wrap  justify-between w-full z-50 ">
       <div className="w-[9.25rem] h-[2.5rem] my-4 mx-40 ">
         <Link to={"/"}>
           <img src={NF_LOGO}></img>

@@ -4,11 +4,10 @@ import { useSelector } from 'react-redux';
 const VideoTitle = () => {
   const movie = useSelector(store=> store.movie.mainMovie)
 
-  console.log(movie);
   
   return (
-    <div className='absolute text-white z-1 bg-gradient-to-r from-black w-screen aspect-video'>
-      <h1 className='mt-60 mx-20 text-3xl font-bold'>{movie?.original_title}</h1>
+    <div className='absolute z-40 text-white  bg-gradient-to-r from-black w-screen aspect-video '>
+      <h1 className='pt-60 mx-20 text-3xl font-bold'>{movie?.original_title}</h1>
       <p className='mx-20 mt-4 w-96 text-sm'>{movie?.overview}</p>
       <div className='flex'>
       <button className='ml-20 mt-4 bg-white text-black p-2 text-lg w-28 rounded-lg hover:bg-gray-200'> ▶ Play</button>

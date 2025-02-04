@@ -10,19 +10,27 @@ import { addMovie } from "../utils/movieSlice";
 import useNowPlayingMovies from "../hooks/useNowPlayingMovies";
 import Primary from "./Primary";
 import Secondary from "./Secondary";
+import usePopularMovies from "../hooks/usePopularMovies";
+import useTopRated from "../hooks/useTopRated";
+import useUpcoming from "../hooks/useUpcoming";
+
 const Browser = () => {
 
 useNowPlayingMovies();
+usePopularMovies();
+useTopRated();
+useUpcoming();
 
 
   return (
     <div>
-      <div className="">
+        <div>
         <Header />
         <Primary/>
+       
         <Secondary/>
-      </div>
-      <h1 className="text-center font-bold font-serif text-5xl">Welcome </h1>
+        </div>
+        
     </div>
   );
 };

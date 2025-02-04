@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "./Header";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import FeaturedMovie from "./FeaturedMovie";
+import { onAuthStateChanged } from "firebase/auth";
+import {auth} from "../utils/firebase";
+import { useDispatch } from "react-redux";
+import { addUser, removeUser } from "../utils/userSlice";
 
 const Body = () => {
+  const dispatch = useDispatch();
+
+
+ 
+
   return (
     <div>
       <div className="">
@@ -37,7 +46,7 @@ const Body = () => {
         <div className="ml-28 mt-36">
           <h1 className="text-white font-bold text-3xl">Trending Now</h1>
         </div>
-        <FeaturedMovie/>
+        <FeaturedMovie />
       </div>
     </div>
   );

@@ -1,17 +1,23 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import Header from "./Header";
 import { validateEmail } from "../utils/validate";
-import { createUser, signInUser } from "../utils/firebaseUser";
-
+import { useDispatch } from "react-redux";
+import { addUser, removeUser } from "../utils/userSlice";
+import { useNavigate } from "react-router-dom";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {auth} from "../utils/firebase";
+import UserSignOption from "../utils/UserSignOption";
+import { BG_IMG, USER_LOGO } from "../utils/constant";
 
 const Login = () => {
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [signInToggle, setSignInToggle] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
-
-
+  const nameRef = useRef(null);
+  const { isSignIn, setIsSignIn } = useContext(UserSignOption);
 
   const handleSigning = () => {
     const message = validateEmail(
@@ -19,25 +25,66 @@ const Login = () => {
       passwordRef.current.value
     );
 
-    console.log("hello123")
     if (message != null) {
       setErrorMessage(message);
     } else {
       setErrorMessage("");
-      if(!signInToggle)
-      {
-       
-        console.log("inside signup")
-         const user = createUser(emailRef.current.value, passwordRef.current.value)
-         console.log(user);
-      }
-      else{
-        console.log("inside signin")
-         const user = signInUser(emailRef.current.value, passwordRef.current.value)
-         console.log(user)
+      if (!signInToggle) {
+     
+        createUserWithEmailAndPassword(auth, emailRef.current.value, passwordRef.current.value)
+          .then((userCredential) => {
+            const user = userCredential.user;
+
+            updateProfile(user, {
+              displayName: nameRef.current.value,
+              photoURL: USER_LOGO,
+            })
+              .then(() => {
+                const {uid, email, displayName, photoURL} = user;
+
+                dispatch(
+                  addUser({
+                    uid: uid,
+                    email: email,
+                    displayName: displayName,
+                    photoURL : photoURL,
+                  })
+                );
+                setIsSignIn(true);
+                // navigate("/browse");
+
+              })
+              .catch((error) => {
+                // An error occurred
+                // ...
+              });
+
+            return user;
+            // ...
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            // ..
+          });
+      } else {
+        signInWithEmailAndPassword(auth, emailRef.current.value, passwordRef.current.value)
+          .then((userCredential) => {
+            // Signed in
+
+            const user = userCredential.user;
+              const { uid, email, displayName, photoURL } = user;
+           
+            
+            return user;
+            // ...
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+          });
       }
     }
-
   };
 
   return (
@@ -45,16 +92,16 @@ const Login = () => {
       <div className="absolute max-h-full">
         <img
           className=""
-          src="https://assets.nflxext.com/ffe/siteui/vlv3/fb5cb900-0cb6-4728-beb5-579b9af98fdd/web/US-en-20250127-TRIFECTA-perspective_286fc4cf-bd17-4ad2-b6e7-6a962bacb568_large.jpg"
+          src= {BG_IMG}
         ></img>
       </div>
       <div className="bg-black h-203 w-full absolute opacity-70" />
 
       <Header />
-      <div className="relative ">
+      <div className="absolute ">
         <form
           onSubmit={(e) => e.preventDefault()}
-          className=" bg-neutral-950/75 w-100 h-150 mx-[550px] mt-10 rounded-lg text-white"
+          className=" bg-neutral-950/75 w-100 h-150 mx-[550px] mt-28 rounded-lg text-white"
         >
           <h1 className="p-8 text-4xl font-bold">
             {signInToggle ? "Sign In" : "Sign Up"}
@@ -62,6 +109,7 @@ const Login = () => {
 
           {!signInToggle && (
             <input
+              ref={nameRef}
               className="w-10/12 mx-8 mt-6 p-4 rounded-sm border h-14 text-white"
               placeholder="Full Name"
               type="text"

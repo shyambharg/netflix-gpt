@@ -26,11 +26,11 @@ const FeaturedMovie = () => {
       >
         {featuredMovieList.map((movie, index) => {
           return (
-            <div className="relative inline-block hover:cursor-pointer hover:scale-105 ease-in-out duration-100">
+            <div key={index} className="relative inline-block hover:cursor-pointer hover:scale-105 ease-in-out duration-100">
                  <span className="absolute mt-24 inline-block text-[110px] font-serif z-1 text-white stroke-blue-700 stroke-3
                  ">{index+1}</span>
                 <img
-              key={index}
+              
               className=" rounded-3xl p-4 h-75 w-55 inline-block"
               src={movie}
             ></img>

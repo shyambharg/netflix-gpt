@@ -16,3 +16,6 @@ export const TMDB_OPTIONS = {
   
 
   export const TMDB_IMG = "https://image.tmdb.org/t/p/original";
+
+
+  export const OPEN_AI_KEY = import.meta.env.VITE_OPEN_AI_KEY;

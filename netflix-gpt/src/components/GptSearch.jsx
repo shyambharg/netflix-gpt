@@ -2,28 +2,24 @@ import React, { useRef } from "react";
 import GptContainer from "./GptContainer";
 import client from "../utils/openai";
 import { useDispatch } from "react-redux";
-import {
-  addGptMovies,
-  addMovieSuggestions,
-  clearGptMovies,
-} from "../utils/gptSlice";
+import { addGptMovies, addMovieSuggestions, clearGptMovies } from "../utils/gptSlice";
 
 import { TMDB_OPTIONS } from "../utils/constant";
 
 const GptSearch = () => {
   const search = useRef();
-  const dispatch = useDispatch();
-
-  const searchMovieTMDB = async (movie) => {
-    const data = await fetch(
-      "https://api.themoviedb.org/3/search/movie?query=" +
-        movie +
-        "&include_adult=false&language=en-US&page=1",
-      TMDB_OPTIONS
-    );
-    const json = await data.json();
-
-    return json.results;
+    const dispatch = useDispatch();
+    
+    const searchMovieTMDB = async (movie) => {
+        const data = await fetch(
+          "https://api.themoviedb.org/3/search/movie?query=" +
+            movie +
+            "&include_adult=false&language=en-US&page=1",
+          TMDB_OPTIONS
+        );
+        const json = await data.json();
+    
+        return json.results;
   };
 
   const handleGptSearch = async () => {
@@ -38,19 +34,25 @@ const GptSearch = () => {
     });
 
     if (!gptResults.choices) {
+      
     }
 
-    const movieSuggestions =
-      gptResults.choices?.[0]?.message?.content.split(",");
+
+    const movieSuggestions = gptResults.choices?.[0]?.message?.content.split(",");
 
     dispatch(addMovieSuggestions(movieSuggestions));
 
-    const promiseArray = movieSuggestions.map((movie) =>
-      searchMovieTMDB(movie)
-    );
+
+    const promiseArray = movieSuggestions.map((movie) => searchMovieTMDB(movie));
+   
 
     const tmdbResults = await Promise.all(promiseArray);
     dispatch(addGptMovies(tmdbResults));
+    
+
+    
+
+
   };
 
   return (

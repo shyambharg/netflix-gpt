@@ -2,8 +2,7 @@ import React, { useContext, useRef, useState } from "react";
 import Header from "./Header";
 import { validateEmail } from "../utils/validate";
 import { useDispatch } from "react-redux";
-import { addUser, removeUser } from "../utils/userSlice";
-import { useNavigate } from "react-router-dom";
+import { addUser } from "../utils/userSlice";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import {auth} from "../utils/firebase";
 import UserSignOption from "../utils/UserSignOption";
@@ -11,7 +10,6 @@ import { BG_IMG, USER_LOGO } from "../utils/constant";
 
 const Login = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [signInToggle, setSignInToggle] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
   const emailRef = useRef(null);
@@ -51,12 +49,11 @@ const Login = () => {
                   })
                 );
                 setIsSignIn(true);
-                // navigate("/browse");
+                
 
               })
               .catch((error) => {
-                // An error occurred
-                // ...
+               setErrorMessage(error);
               });
 
             return user;
@@ -82,6 +79,7 @@ const Login = () => {
           .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
+            setErrorMessage(errorMessage);
           });
       }
     }

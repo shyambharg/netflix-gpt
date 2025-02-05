@@ -24,7 +24,7 @@ const useNowPlayingMovies = () => {
 
     dispatch(addMovie(movies));
 
-    const trailer = movies[19];
+    const trailer = movies[0];
     dispatch(addMainMovie(trailer));
 
     const data2 = await fetch(

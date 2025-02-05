@@ -16,3 +16,6 @@ export const TMDB_OPTIONS = {
   
 
   export const TMDB_IMG = "https://image.tmdb.org/t/p/original";
+
+
+  export const OPEN_AI_KEY = "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"
